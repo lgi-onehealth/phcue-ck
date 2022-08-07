@@ -1,6 +1,7 @@
 use clap::Parser;
 use serde::{Deserialize, Serialize};
 
+/// A struct to hold the data returned from the ENA API
 #[derive(Serialize, Deserialize, Clone, Debug)]
 struct ENAApiResponse {
     run_accession: String,
@@ -15,6 +16,7 @@ struct ENAApiResponse {
     sra_md5: String,
 }
 
+/// A struct to hold the parsed data from the ENA API and return it to the user
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(from = "ENAApiResponse")]
 pub struct Run {
@@ -30,6 +32,9 @@ pub struct Run {
     fastq_2_md5: Option<String>,
 }
 
+/// Here, we implement the From trait for the Run struct, so that Run instances
+/// can be derived from instances of the ENAApiResponse type.
+/// Full example here: https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=6d15ef7f0834dae23b1bcea336c627f2
 impl From<ENAApiResponse> for Run {
     fn from(response: ENAApiResponse) -> Self {
         let fastq_ftp_array = response.fastq_ftp.split(";").collect::<Vec<&str>>();
@@ -44,6 +49,11 @@ impl From<ENAApiResponse> for Run {
         let mut fastq_md5 = None;
         let mut fastq_1_md5 = None;
         let mut fastq_2_md5 = None;
+        // Three cases, when there is a single FASTQ file,
+        // when there are three FASTQ files (the paired files with suffix
+        // 1 and 2, and a third one usually with few
+        // reads and no suffix), and the case when there are only two, paired,
+        //  FASTQ files (1 and 2).
         if fastq_ftp_array.len() == 1 {
             fastq_ftp = Some(fastq_ftp_array[0].to_string());
             fastq_bytes = Some(fastq_bytes_array[0].parse::<u32>().unwrap());
@@ -81,6 +91,7 @@ impl From<ENAApiResponse> for Run {
     }
 }
 
+/// CLI options and arguments
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 pub struct Args {
