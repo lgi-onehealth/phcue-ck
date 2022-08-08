@@ -1,4 +1,5 @@
 use clap::Parser;
+use futures::StreamExt;
 use regex;
 use serde::{Deserialize, Serialize};
 
@@ -59,7 +60,7 @@ struct Reads {
 }
 
 /// A function to query the ENA API and return a vector of Run instances
-pub async fn query_ena(
+async fn query_ena(
     accession: &String,
     client: &reqwest::Client,
 ) -> Result<Vec<Run>, reqwest::Error> {
@@ -67,6 +68,36 @@ pub async fn query_ena(
     let response = client.get(&request_url).send().await?;
     let runs: Vec<Run> = response.json().await?;
     Ok(runs)
+}
+
+/// A function to query the ENA API and return a vector of Run instances
+/// This function is used to query the ENA API concurrently across multiple accessions
+pub async fn concurrent_query_ena(accessions: Vec<String>, num_requests: usize) -> Vec<Run> {
+    let client = reqwest::Client::new();
+    let nested_runs = futures::stream::iter({
+        accessions.iter().map(|accession| {
+            let client = client.clone();
+            eprintln!("Querying ENA for accession: {}", accession);
+            async move {
+                match query_ena(accession, &client).await {
+                    Ok(run) => Some(run),
+                    Err(e) => {
+                        eprintln!("Error querying ENA for accession: {}", accession);
+                        eprintln!("Error: {}", e);
+                        None
+                    }
+                }
+            }
+        })
+    })
+    .buffer_unordered(num_requests)
+    .collect::<Vec<_>>()
+    .await
+    .into_iter()
+    .filter_map(|run| run)
+    .collect::<Vec<_>>();
+    let runs = nested_runs.into_iter().flatten().collect::<Vec<Run>>();
+    runs
 }
 
 /// CLI options and arguments
