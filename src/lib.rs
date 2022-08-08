@@ -77,6 +77,19 @@ pub struct Args {
     #[clap(short, long, value_parser, multiple = true, validator = validate_accession)]
     /// The accession of the run to query (must be an SRR, ERR or DRR accession)
     pub accession: Vec<String>,
+
+    #[clap(
+        short = 'n',
+        long = "num-requests",
+        value_name = "NUM",
+        default_value = "1",
+        help = "Maximum number of concurrent requests to make to the ENA API"
+    )]
+    /// The maximum number of concurrent requests to make to the ENA API
+    /// Default: 1
+    /// Maximum: 10
+    /// Minimum: 1
+    pub num_requests: u8,
 }
 
 pub fn parse_args() -> Args {
@@ -91,5 +104,21 @@ fn validate_accession(accession: &str) -> Result<(), String> {
         Ok(())
     } else {
         Err(format!("{} is not a valid accession number", accession))
+    }
+}
+
+/// Validate the total number of concurrent requests to make to the ENA API
+/// to make sure it is within the bounds of 1 and 10. If not, return the minimum
+/// if num_requests is less than 1 or maximum value if num_requests is larger than 10.
+/// We have chosen to bound it to 10 to be nice to the ENA API.
+pub fn check_num_requests(num_requests: u8) -> usize {
+    if num_requests > 10 {
+        eprintln!("To be nice to ENA, we only allow up to 10 concurrent requests. Setting number of requests to 10.");
+        return 10;
+    } else if num_requests < 1 {
+        eprintln!("Number of requests should be at least 1. Setting number of requests to 1.");
+        return 1;
+    } else {
+        return num_requests as usize;
     }
 }
