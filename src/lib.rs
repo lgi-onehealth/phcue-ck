@@ -1,4 +1,5 @@
 use clap::Parser;
+use regex;
 use serde::{Deserialize, Serialize};
 
 /// A struct to hold the data returned from the ENA API
@@ -69,15 +70,26 @@ pub async fn query_ena(
 }
 
 /// CLI options and arguments
-// TODO: validate accession to start with SRR or ERR or DRR
 // TODO: add the option to read accesssions from a file (one per line)
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 pub struct Args {
-    #[clap(short, long, value_parser)]
+    #[clap(short, long, value_parser, validator = validate_accession)]
+    /// The accession of the run to query (must be an SRR, ERR or DRR accession)
     pub accession: String,
 }
 
 pub fn parse_args() -> Args {
     Args::parse()
+}
+
+/// Validate the accession number to make sure it starts with SRR, ERR,
+///  or DRR
+fn validate_accession(accession: &str) -> Result<(), String> {
+    let regex = regex::Regex::new(r"^(SRR|ERR|DRR)[0-9]{6,10}$").unwrap();
+    if regex.is_match(accession) {
+        Ok(())
+    } else {
+        Err(format!("{} is not a valid accession number", accession))
+    }
 }
