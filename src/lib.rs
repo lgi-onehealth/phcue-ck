@@ -91,7 +91,20 @@ impl From<ENAApiResponse> for Run {
     }
 }
 
+/// A function to query the ENA API and return a vector of Run instances
+pub async fn query_ena(
+    accession: &String,
+    client: &reqwest::Client,
+) -> Result<Vec<Run>, reqwest::Error> {
+    let request_url = format!("https://www.ebi.ac.uk/ena/portal/api/filereport?accession={accession}&result=read_run&format=json", accession = accession);
+    let response = client.get(&request_url).send().await?;
+    let runs: Vec<Run> = response.json().await?;
+    Ok(runs)
+}
+
 /// CLI options and arguments
+// TODO: validate accession to start with SRR or ERR or DRR
+// TODO: add the option to read accesssions from a file (one per line)
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 pub struct Args {
