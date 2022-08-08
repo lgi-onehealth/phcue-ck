@@ -21,15 +21,7 @@ struct ENAApiResponse {
 #[serde(from = "ENAApiResponse")]
 pub struct Run {
     accession: String,
-    fastq_ftp: Option<String>,
-    fastq_1_ftp: Option<String>,
-    fastq_2_ftp: Option<String>,
-    fastq_bytes: Option<u32>,
-    fastq_1_bytes: Option<u32>,
-    fastq_2_bytes: Option<u32>,
-    fastq_md5: Option<String>,
-    fastq_1_md5: Option<String>,
-    fastq_2_md5: Option<String>,
+    reads: Vec<Reads>,
 }
 
 /// Here, we implement the From trait for the Run struct, so that Run instances
@@ -40,55 +32,29 @@ impl From<ENAApiResponse> for Run {
         let fastq_ftp_array = response.fastq_ftp.split(";").collect::<Vec<&str>>();
         let fastq_bytes_array = response.fastq_bytes.split(";").collect::<Vec<&str>>();
         let fastq_md5_array = response.fastq_md5.split(";").collect::<Vec<&str>>();
-        let mut fastq_ftp = None;
-        let mut fastq_1_ftp = None;
-        let mut fastq_2_ftp = None;
-        let mut fastq_bytes = None;
-        let mut fastq_1_bytes = None;
-        let mut fastq_2_bytes = None;
-        let mut fastq_md5 = None;
-        let mut fastq_1_md5 = None;
-        let mut fastq_2_md5 = None;
-        // Three cases, when there is a single FASTQ file,
-        // when there are three FASTQ files (the paired files with suffix
-        // 1 and 2, and a third one usually with few
-        // reads and no suffix), and the case when there are only two, paired,
-        //  FASTQ files (1 and 2).
-        if fastq_ftp_array.len() == 1 {
-            fastq_ftp = Some(fastq_ftp_array[0].to_string());
-            fastq_bytes = Some(fastq_bytes_array[0].parse::<u32>().unwrap());
-            fastq_md5 = Some(fastq_md5_array[0].to_string());
-        } else if fastq_ftp_array.len() == 3 {
-            fastq_ftp = Some(fastq_ftp_array[0].to_string());
-            fastq_1_ftp = Some(fastq_ftp_array[1].to_string());
-            fastq_2_ftp = Some(fastq_ftp_array[2].to_string());
-            fastq_bytes = Some(fastq_bytes_array[0].parse::<u32>().unwrap());
-            fastq_1_bytes = Some(fastq_bytes_array[1].parse::<u32>().unwrap());
-            fastq_2_bytes = Some(fastq_bytes_array[2].parse::<u32>().unwrap());
-            fastq_md5 = Some(fastq_md5_array[0].to_string());
-            fastq_1_md5 = Some(fastq_md5_array[1].to_string());
-            fastq_2_md5 = Some(fastq_md5_array[2].to_string());
-        } else {
-            fastq_1_ftp = Some(fastq_ftp_array[0].to_string());
-            fastq_2_ftp = Some(fastq_ftp_array[1].to_string());
-            fastq_1_bytes = Some(fastq_bytes_array[0].parse::<u32>().unwrap());
-            fastq_2_bytes = Some(fastq_bytes_array[1].parse::<u32>().unwrap());
-            fastq_1_md5 = Some(fastq_md5_array[0].to_string());
-            fastq_2_md5 = Some(fastq_md5_array[1].to_string());
+        let mut reads: Vec<Reads> = Vec::new();
+        for i in 0..fastq_ftp_array.len() {
+            reads.push(Reads {
+                url: format!(
+                    "ftp://{address}",
+                    address = fastq_ftp_array[i].to_string().to_owned()
+                ),
+                bytes: fastq_bytes_array[i].parse::<u32>().unwrap(),
+                md5: fastq_md5_array[i].to_string().to_owned(),
+            });
         }
         Self {
             accession: response.run_accession,
-            fastq_ftp,
-            fastq_1_ftp,
-            fastq_2_ftp,
-            fastq_bytes,
-            fastq_1_bytes,
-            fastq_2_bytes,
-            fastq_md5,
-            fastq_1_md5,
-            fastq_2_md5,
+            reads,
         }
     }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+struct Reads {
+    url: String,
+    md5: String,
+    bytes: u32,
 }
 
 /// A function to query the ENA API and return a vector of Run instances
