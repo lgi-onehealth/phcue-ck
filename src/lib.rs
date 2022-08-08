@@ -74,9 +74,9 @@ pub async fn query_ena(
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 pub struct Args {
-    #[clap(short, long, value_parser, validator = validate_accession)]
+    #[clap(short, long, value_parser, multiple = true, validator = validate_accession)]
     /// The accession of the run to query (must be an SRR, ERR or DRR accession)
-    pub accession: String,
+    pub accession: Vec<String>,
 }
 
 pub fn parse_args() -> Args {
