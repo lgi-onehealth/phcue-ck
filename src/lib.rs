@@ -142,6 +142,7 @@ fn validate_accession(accession: &str) -> Result<(), String> {
 /// to make sure it is within the bounds of 1 and 10. If not, return the minimum
 /// if num_requests is less than 1 or maximum value if num_requests is larger than 10.
 /// We have chosen to bound it to 10 to be nice to the ENA API.
+///
 pub fn check_num_requests(num_requests: u8) -> usize {
     if num_requests > 10 {
         eprintln!("To be nice to ENA, we only allow up to 10 concurrent requests. Setting number of requests to 10.");
@@ -151,5 +152,59 @@ pub fn check_num_requests(num_requests: u8) -> usize {
         return 1;
     } else {
         return num_requests as usize;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_validate_srr_accession() {
+        let accession = "SRR1234567";
+        let result = validate_accession(accession);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_validate_err_accession() {
+        let accession = "ERR1234567";
+        let result = validate_accession(accession);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_validate_drr_accession() {
+        let accession = "DRR1234567";
+        let result = validate_accession(accession);
+        assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_validate_invalid_accession() {
+        let accession = "1234567";
+        let result = validate_accession(accession);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_check_num_requests_valid() {
+        let num_requests = 5;
+        let result = check_num_requests(num_requests);
+        assert_eq!(result, 5);
+    }
+
+    #[test]
+    fn test_check_num_requests_invalid_less_than_1() {
+        let num_requests = 0;
+        let result = check_num_requests(num_requests);
+        assert_eq!(result, 1);
+    }
+
+    #[test]
+    fn test_check_num_requests_invalid_greater_than_10() {
+        let num_requests = 11;
+        let result = check_num_requests(num_requests);
+        assert_eq!(result, 10);
     }
 }
