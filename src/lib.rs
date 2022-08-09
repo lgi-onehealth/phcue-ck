@@ -41,7 +41,16 @@ impl From<ENAApiResponse> for Run {
                     "ftp://{address}",
                     address = fastq_ftp_array[i].to_string().to_owned()
                 ),
-                bytes: fastq_bytes_array[i].parse::<u32>().unwrap(),
+                bytes: match fastq_bytes_array[i].parse::<u32>() {
+                    Ok(n) => n,
+                    Err(_) => {
+                        eprintln!(
+                            "Could not parse {} as a number for accession {}",
+                            fastq_bytes_array[i], response.run_accession
+                        );
+                        0
+                    }
+                },
                 md5: fastq_md5_array[i].to_string().to_owned(),
             });
         }
