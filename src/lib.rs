@@ -2,6 +2,10 @@ use clap::Parser;
 use futures::StreamExt;
 use regex;
 use serde::{Deserialize, Serialize};
+use std::fs::File;
+use std::io::{BufRead, BufReader};
+use std::path::PathBuf;
+use std::process::exit;
 
 /// A struct to hold the data returned from the ENA API
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -110,11 +114,10 @@ pub async fn concurrent_query_ena(accessions: Vec<String>, num_requests: usize) 
 }
 
 /// CLI options and arguments
-// TODO: add the option to read accesssions from a file (one per line)
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 pub struct Args {
-    #[clap(short, long, value_parser, multiple = true, validator = validate_accession)]
+    #[clap(short, long, value_parser, multiple = true, validator = validate_accession, required_unless_present = "file")]
     /// The accession of the run to query (must be an SRR, ERR or DRR accession)
     pub accession: Vec<String>,
 
@@ -130,6 +133,18 @@ pub struct Args {
     /// Maximum: 10
     /// Minimum: 1
     pub num_requests: u8,
+
+    #[clap(
+        short,
+        long,
+        value_name = "FILE",
+        help = "File containing accessions to query",
+        required_unless_present = "accession"
+    )]
+    /// The file containing accessions to query
+    /// If this is specified, the accessions will be read from this file
+    /// If this is not specified, the accessions will be read from the command line
+    pub file: Option<PathBuf>,
 }
 
 pub fn parse_args() -> Args {
@@ -162,6 +177,35 @@ pub fn check_num_requests(num_requests: u8) -> usize {
     } else {
         return num_requests as usize;
     }
+}
+
+/// A function to read accessions from a file and return a vector of validated
+/// accessions. The function skips any empty lines, and will issue a warning
+/// if it encounters an invalid accession. This deals with any potential header
+/// lines in the file.
+pub fn read_accessions(file: &PathBuf) -> Vec<String> {
+    let file = match File::open(file) {
+        Ok(file) => file,
+        Err(e) => {
+            eprintln!("Error opening file: {}", e);
+            exit(1);
+        }
+    };
+    let reader = BufReader::new(file);
+    let accessions = reader
+        .lines()
+        .into_iter()
+        .filter_map(|line| line.ok())
+        .filter_map(|line| if line.is_empty() { None } else { Some(line) })
+        .filter_map(|line| match validate_accession(line.as_str()) {
+            Ok(_) => Some(line),
+            Err(e) => {
+                eprintln!("Error validating accession: {}. Ignoring this value...", e);
+                None
+            }
+        })
+        .collect();
+    accessions
 }
 
 #[cfg(test)]

@@ -1,0 +1,38 @@
+```
+$ fq-ck -n2 --file accessions.txt
+Querying ENA for accession: SRR16298173
+Querying ENA for accession: SRR16298174
+[
+  {
+    "accession": "SRR16298173",
+    "reads": [
+      {
+        "url": "ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_1.fastq.gz",
+        "md5": "76c841d58a4949736555f6fe2adcc86a",
+        "bytes": 7332259
+      },
+      {
+        "url": "ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_2.fastq.gz",
+        "md5": "861e40962c89d62bf298fde8ca1b7415",
+        "bytes": 7765784
+      }
+    ]
+  },
+  {
+    "accession": "SRR16298174",
+    "reads": [
+      {
+        "url": "ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/074/SRR16298174/SRR16298174_1.fastq.gz",
+        "md5": "ca4365343d144947b5acf6e8ee124e49",
+        "bytes": 7444532
+      },
+      {
+        "url": "ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/074/SRR16298174/SRR16298174_2.fastq.gz",
+        "md5": "39523f0e9757e953cb0a5d707b9e2b58",
+        "bytes": 10960575
+      }
+    ]
+  }
+]
+
+```
