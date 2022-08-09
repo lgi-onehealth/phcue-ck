@@ -123,7 +123,7 @@ pub struct Args {
         long = "num-requests",
         value_name = "NUM",
         default_value = "1",
-        help = "Maximum number of concurrent requests to make to the ENA API"
+        help = "Maximum number of concurrent requests to make to the ENA API (max of 10 are allowed)"
     )]
     /// The maximum number of concurrent requests to make to the ENA API
     /// Default: 1
