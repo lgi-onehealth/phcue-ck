@@ -13,6 +13,7 @@ async fn main() -> Result<(), Error> {
     let num_requests = check_num_requests(args.num_requests);
     let runs: Vec<Run> = concurrent_query_ena(accessions, num_requests).await;
     if runs.len() > 0 {
+        runs.sort_by(|a, b| a.accession.cmp(&b.accession));
         println!("{}", serde_json::to_string_pretty(&runs).unwrap());
     }
     Ok(())
