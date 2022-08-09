@@ -1,5 +1,5 @@
 ```
-$ fq-ck --accession ERR5556343
+$ phcue-ck --accession ERR5556343
 Querying ENA for accession: ERR5556343
 [
   {

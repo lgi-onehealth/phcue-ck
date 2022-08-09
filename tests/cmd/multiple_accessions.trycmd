@@ -1,5 +1,5 @@
 ```
-$ fq-ck --accession SRR16298173 SRR16298174
+$ phcue-ck --accession SRR16298173 SRR16298174
 Querying ENA for accession: SRR16298173
 Querying ENA for accession: SRR16298174
 [

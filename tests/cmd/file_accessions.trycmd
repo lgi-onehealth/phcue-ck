@@ -1,5 +1,5 @@
 ```
-$ fq-ck -n2 --file accessions.txt
+$ phcue-ck -n2 --file accessions.txt
 Querying ENA for accession: SRR16298173
 Querying ENA for accession: SRR16298174
 [

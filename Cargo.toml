@@ -1,7 +1,15 @@
 [package]
-name = "fq-ck"
+name = "phcue-ck"
 version = "0.1.0"
 edition = "2021"
+authors = [ "Anders Goncalves da Silva <andersgs@gmail.com>" ]
+description = "phcue-ck is a command line tool to obtain FTP links to FASTQ files from ENA using run accession"
+readme = "README.md"
+license = "MIT"
+license_file = "LICENSE"
+keywords = [ "bioinformatics", "fastq" ]
+categories = [ "science", "command-line-utilities" ]
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
