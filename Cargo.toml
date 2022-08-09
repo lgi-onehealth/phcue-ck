@@ -9,6 +9,7 @@ license = "MIT"
 license_file = "LICENSE"
 keywords = [ "bioinformatics", "fastq" ]
 categories = [ "science", "command-line-utilities" ]
+repository = "https://github.com/lgi-onehealth/phcue-ck"
 
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
