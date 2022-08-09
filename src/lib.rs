@@ -26,8 +26,19 @@ struct ENAApiResponse {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(from = "ENAApiResponse")]
 pub struct Run {
-    accession: String,
+    pub accession: String,
     reads: Vec<Reads>,
+}
+
+impl Run {
+    /// Clean single end reads if there are paired end reads too
+    /// This is if the user does not wish to have the single end reads, and
+    /// keep only the paired end reads
+    pub fn clean_single_end(&mut self) {
+        if self.reads.len() == 3 {
+            self.reads.remove(0);
+        }
+    }
 }
 
 /// Here, we implement the From trait for the Run struct, so that Run instances
@@ -65,7 +76,7 @@ impl From<ENAApiResponse> for Run {
     }
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 struct Reads {
     url: String,
     md5: String,
@@ -145,6 +156,16 @@ pub struct Args {
     /// If this is specified, the accessions will be read from this file
     /// If this is not specified, the accessions will be read from the command line
     pub file: Option<PathBuf>,
+
+    #[clap(
+        short,
+        long,
+        help = "Keep single end reads if there are paired end reads too"
+    )]
+    /// Keep single end reads if there are paired end reads too
+    /// By default, we discard single end reads if there are paired end reads too.
+    /// This is if the user does wish to have the single end reads
+    pub keep_single_end: bool,
 }
 
 pub fn parse_args() -> Args {
@@ -259,5 +280,46 @@ mod tests {
         let num_requests = 11;
         let result = check_num_requests(num_requests);
         assert_eq!(result, 10);
+    }
+
+    #[test]
+    fn test_removal_single_reads() {
+        let read_se = Reads {
+            url: "read.fastq.gz".to_string(),
+            md5: "md5".to_string(),
+            bytes: 123,
+        };
+        let read_pe_1 = Reads {
+            url: "read_1.fastq.gz".to_string(),
+            md5: "md5".to_string(),
+            bytes: 123,
+        };
+        let read_pe_2 = Reads {
+            url: "read_2.fastq.gz".to_string(),
+            md5: "md5".to_string(),
+            bytes: 123,
+        };
+        let reads_se = vec![read_se.clone()];
+        let reads_pe = vec![read_pe_1.clone(), read_pe_2.clone()];
+        let reads_pe_se = vec![read_se.clone(), read_pe_1.clone(), read_pe_2.clone()];
+        let run_se = Run {
+            accession: "SRR1234567".to_string(),
+            reads: reads_se,
+        };
+        let run_pe = Run {
+            accession: "SRR1234567".to_string(),
+            reads: reads_pe,
+        };
+        let run_pe_se = Run {
+            accession: "SRR1234567".to_string(),
+            reads: reads_pe_se,
+        };
+        let mut runs = vec![run_se, run_pe, run_pe_se];
+        runs.iter_mut().for_each(|run| run.clean_single_end());
+        assert_eq!(runs[0].reads[0], read_se);
+        assert_eq!(runs[1].reads[0], read_pe_1);
+        assert_eq!(runs[1].reads[1], read_pe_2);
+        assert_eq!(runs[2].reads[0], read_pe_1);
+        assert_eq!(runs[2].reads[1], read_pe_2);
     }
 }

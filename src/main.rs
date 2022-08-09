@@ -11,9 +11,12 @@ async fn main() -> Result<(), Error> {
         None => args.accession,
     };
     let num_requests = check_num_requests(args.num_requests);
-    let runs: Vec<Run> = concurrent_query_ena(accessions, num_requests).await;
+    let mut runs: Vec<Run> = concurrent_query_ena(accessions, num_requests).await;
     if runs.len() > 0 {
         runs.sort_by(|a, b| a.accession.cmp(&b.accession));
+        if !args.keep_single_end {
+            runs.iter_mut().for_each(|run| run.clean_single_end());
+        }
         println!("{}", serde_json::to_string_pretty(&runs).unwrap());
     }
     Ok(())
