@@ -45,7 +45,7 @@ impl From<ENAApiResponse> for Run {
                     Ok(n) => n,
                     Err(_) => {
                         eprintln!(
-                            "Could not parse {} as a number for accession {}",
+                            "Could not parse {} as a number of bytes for accession {}",
                             fastq_bytes_array[i], response.run_accession
                         );
                         0
