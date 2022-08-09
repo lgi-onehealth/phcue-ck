@@ -1,0 +1,22 @@
+```
+$ fq-ck --accession ERR5556343
+Querying ENA for accession: ERR5556343
+[
+  {
+    "accession": "ERR5556343",
+    "reads": [
+      {
+        "url": "ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR555/003/ERR5556343/ERR5556343_1.fastq.gz",
+        "md5": "2dd162ca91d340667b611d7f014eaaa5",
+        "bytes": 7479353
+      },
+      {
+        "url": "ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR555/003/ERR5556343/ERR5556343_2.fastq.gz",
+        "md5": "8041deb0614dc669a3f28c20b330a599",
+        "bytes": 8349710
+      }
+    ]
+  }
+]
+
+```
