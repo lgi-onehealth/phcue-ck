@@ -18,7 +18,7 @@ Download the `phcue-ck_v<version>_x86_64-pc-windows-gnu.zip` file and unzip it. 
 If you have `cargo` installed and want to install `phcue-ck` using `cargo`, you can do so by running:
 
 ```bash
-cargo install --git https://github.com/lgi-onehealth/phcue-ck
+cargo install phcue-ck
 ```
 
 This will add the `phcue-ck` binary to `$HOME/.cargo/bin`. Make sure to add that folder to your `PATH` environment variable. For instance, in `bash` shell, you can run the following:
