@@ -3,20 +3,25 @@ name: ci
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - 'docs/'
+      - 'mkdocs.yml'
   pull_request:
     branches: [ "main" ]
+    paths-ignore:
+      - 'docs/'
+      - 'mkdocs.yml'
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Build
       run: cargo build --verbose
     - name: Run tests
       run: cargo test --verbose
+  

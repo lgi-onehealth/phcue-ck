@@ -1,0 +1,24 @@
+site_name: phcue-ck
+nav:
+  - "index.md"
+  - "installation.md"
+  - "usage.md"
+  - "examples.md"
+copyright: "Lighthouse Genomics, Inc. 2022"
+theme:
+  name: material
+  logo: "assets/phcue-ck-fav.svg"
+  palette:
+  # Palette toggle for light mode
+  - media: "(prefers-color-scheme: light)"
+    scheme: default
+    toggle:
+      icon: material/brightness-7
+      name: Switch to dark mode
+
+  # Palette toggle for dark mode
+  - media: "(prefers-color-scheme: dark)"
+    scheme: slate
+    toggle:
+      icon: material/brightness-4
+      name: Switch to light mode
