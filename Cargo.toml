@@ -6,7 +6,6 @@ authors = [ "Anders Goncalves da Silva <andersgs@gmail.com>" ]
 description = "phcue-ck is a command line tool to obtain FTP links to FASTQ files from ENA using run accession"
 readme = "README.md"
 license = "MIT"
-license-file = "LICENSE"
 keywords = [ "bioinformatics", "fastq" ]
 categories = [ "science", "command-line-utilities" ]
 repository = "https://github.com/lgi-onehealth/phcue-ck"
