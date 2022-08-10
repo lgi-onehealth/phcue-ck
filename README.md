@@ -1,6 +1,7 @@
 #  `phcue-ck`: a command line tool to get FTP urls for FASTQ data on ENA
 
 [![ci](https://github.com/lgi-onehealth/phcue-ck/actions/workflows/ci.yml/badge.svg)](https://github.com/lgi-onehealth/phcue-ck/actions/workflows/ci.yml)
+![GitHub](https://img.shields.io/github/license/lgi-onehealth/phcue-ck?color=light%20green)
 
 ## Background
 
