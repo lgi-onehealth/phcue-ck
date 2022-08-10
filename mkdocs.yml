@@ -5,6 +5,7 @@ nav:
   - "usage.md"
   - "examples.md"
 copyright: "Lighthouse Genomics, Inc. 2022"
+repo_url: "https://github.com/lgi-onehealth/phcue-ck"
 theme:
   name: material
   logo: "assets/phcue-ck-fav.svg"
@@ -22,3 +23,5 @@ theme:
     toggle:
       icon: material/brightness-4
       name: Switch to light mode
+  icon:
+    repo: material/github
