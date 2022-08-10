@@ -26,3 +26,11 @@ This will add the `phcue-ck` binary to `$HOME/.cargo/bin`. Make sure to add that
 ```bash
 echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> $HOME/.bashrc
 ```
+
+## Using with Docker
+
+You can run `phcue-ck` inside a Docker container by running:
+
+```bash
+docker run -it --rm -v $PWD:/app lighthousegenomics/phcue-ck:latest phcue-ck --help
+```
