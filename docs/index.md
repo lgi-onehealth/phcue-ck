@@ -3,6 +3,7 @@
 <p align="center">
     <img src="https://github.com/lgi-onehealth/phcue-ck/actions/workflows/ci.yml/badge.svg" />
     <img alt="Crates.io" src="https://img.shields.io/crates/v/phcue-ck?color=light">
+    <img alt="Docker Image Version (latest semver)" src="https://img.shields.io/docker/v/lighthousegenomics/phcue-ck?color=light&label=dockerhub&logo=docker">
     <img src="https://img.shields.io/github/license/lgi-onehealth/phcue-ck?color=light%20green" />
 </p>
 
