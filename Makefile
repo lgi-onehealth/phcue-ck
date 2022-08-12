@@ -2,6 +2,7 @@
 .SHELL: /bin/bash
 
 NCPUS := $(shell if [ $(shell nproc) -gt 1 ]; then expr $(shell nproc) - 1; else 1; fi)
+VERSION := $(shell grep '^version' Cargo.toml | sed -e 's/version = \"//g' -e 's/\"//g')
 
 test_linux:
 	CARGO_BUILD_JOBS=${NCPUS} cross test --target x86_64-unknown-linux-musl
@@ -25,3 +26,5 @@ update_docker:
 	docker tag phcue-ck:v${VERSION} lighthousegenomics/phcue-ck:v${VERSION}
 	docker push lighthousegenomics/phcue-ck:v${VERSION}
 
+update_cargo:
+	cargo publish
