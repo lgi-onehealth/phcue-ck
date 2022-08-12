@@ -772,6 +772,7 @@ dependencies = [
  "clap",
  "futures",
  "openssl",
+ "openssl-probe",
  "regex",
  "reqwest",
  "serde",

@@ -17,6 +17,7 @@ repository = "https://github.com/lgi-onehealth/phcue-ck"
 clap = { version = "3.2.16", features = ["derive"] }
 futures = "0.3.21"
 openssl = { version = "0.10.41", features = ["vendored"] }
+openssl-probe = "0.1.5"
 regex = "1.6.0"
 reqwest = { version = "0.11.11", features = ["json"] }
 serde = { version = "1.0.142", features = ["derive"] }
@@ -26,7 +27,3 @@ tokio = { version = "1.20.1", features = ["full"] }
 [dev-dependencies]
 trycmd = "0.13.5"
 
-[package.metadata.cross.target.x86_64-unknown-linux-musl]
-pre-build = [
-    "apt-get update && apt-get install --assume-yes libssl-dev libcurl4-openssl-dev",
-]

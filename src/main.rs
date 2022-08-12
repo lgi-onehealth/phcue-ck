@@ -5,6 +5,7 @@ use phcue_ck::{check_num_requests, concurrent_query_ena, parse_args, read_access
 use reqwest::Error;
 #[tokio::main]
 async fn main() -> Result<(), Error> {
+    openssl_probe::init_ssl_cert_env_vars();
     let args = parse_args();
     let accessions = match args.file {
         Some(file) => read_accessions(&file),
