@@ -15,3 +15,5 @@ test_osx:
 build_osx:
 	CARGO_BUILD_JOBS=${NCPUS} MACOSX_DEPLOYMENT_TARGET=10.7 cargo build --release --target x86_64-apple-darwin
 
+release: build_linux build_osx
+	/bin/bash scripts/release.sh

@@ -9,6 +9,7 @@ license = "MIT"
 keywords = [ "bioinformatics", "fastq" ]
 categories = [ "science", "command-line-utilities" ]
 repository = "https://github.com/lgi-onehealth/phcue-ck"
+exclude = ["/scripts", "Dockerfile", "/.github", "Makefile", "mkdocs.yml", "/docs", "CHANGELOG.md"]
 
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
