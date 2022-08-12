@@ -13,7 +13,7 @@ async fn main() -> Result<(), Error> {
     };
     let num_requests = check_num_requests(args.num_requests);
     let mut runs: Vec<Run> = concurrent_query_ena(accessions, num_requests).await;
-    if runs.len() > 0 {
+    if !runs.is_empty() {
         runs.sort_by(|a, b| a.accession.cmp(&b.accession));
         if !args.keep_single_end {
             runs.iter_mut().for_each(|run| run.clean_single_end());
