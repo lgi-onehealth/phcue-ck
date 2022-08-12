@@ -1,6 +1,5 @@
 use clap::Parser;
 use futures::StreamExt;
-use regex;
 use serde::{Deserialize, Serialize};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -46,9 +45,9 @@ impl Run {
 /// Full example here: https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=6d15ef7f0834dae23b1bcea336c627f2
 impl From<ENAApiResponse> for Run {
     fn from(response: ENAApiResponse) -> Self {
-        let fastq_ftp_array = response.fastq_ftp.split(";").collect::<Vec<&str>>();
-        let fastq_bytes_array = response.fastq_bytes.split(";").collect::<Vec<&str>>();
-        let fastq_md5_array = response.fastq_md5.split(";").collect::<Vec<&str>>();
+        let fastq_ftp_array = response.fastq_ftp.split(';').collect::<Vec<&str>>();
+        let fastq_bytes_array = response.fastq_bytes.split(';').collect::<Vec<&str>>();
+        let fastq_md5_array = response.fastq_md5.split(';').collect::<Vec<&str>>();
         let mut reads: Vec<Reads> = Vec::new();
         for i in 0..fastq_ftp_array.len() {
             reads.push(Reads {
@@ -98,7 +97,7 @@ async fn query_ena(
 /// This function is used to query the ENA API concurrently across multiple accessions
 pub async fn concurrent_query_ena(accessions: Vec<String>, num_requests: usize) -> Vec<Run> {
     let client = reqwest::Client::new();
-    let nested_runs = futures::stream::iter({
+    futures::stream::iter({
         accessions.iter().map(|accession| {
             let client = client.clone();
             eprintln!("Querying ENA for accession: {}", accession);
@@ -119,9 +118,8 @@ pub async fn concurrent_query_ena(accessions: Vec<String>, num_requests: usize) 
     .await
     .into_iter()
     .filter_map(|run| run)
-    .collect::<Vec<_>>();
-    let runs = nested_runs.into_iter().flatten().collect::<Vec<Run>>();
-    runs
+    .flatten()
+    .collect::<Vec<Run>>()
 }
 
 /// CLI options and arguments
@@ -191,12 +189,12 @@ fn validate_accession(accession: &str) -> Result<(), String> {
 pub fn check_num_requests(num_requests: u8) -> usize {
     if num_requests > 10 {
         eprintln!("To be nice to ENA, we only allow up to 10 concurrent requests. Setting number of requests to 10.");
-        return 10;
+        10
     } else if num_requests < 1 {
         eprintln!("Number of requests should be at least 1. Setting number of requests to 1.");
-        return 1;
+        1
     } else {
-        return num_requests as usize;
+        num_requests as usize
     }
 }
 
@@ -213,7 +211,7 @@ pub fn read_accessions(file: &PathBuf) -> Vec<String> {
         }
     };
     let reader = BufReader::new(file);
-    let accessions = reader
+    reader
         .lines()
         .into_iter()
         .filter_map(|line| line.ok())
@@ -225,8 +223,7 @@ pub fn read_accessions(file: &PathBuf) -> Vec<String> {
                 None
             }
         })
-        .collect();
-    accessions
+        .collect()
 }
 
 #[cfg(test)]
