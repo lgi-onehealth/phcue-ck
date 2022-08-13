@@ -16,3 +16,5 @@ RUN tar -xvf phcue-ck_v${VERSION}_x86_64-unknown-linux-musl.tar.gz && \
 RUN adduser --system --group --no-create-home app
 
 USER app
+
+RUN phcue-ck -a ERR5556343
