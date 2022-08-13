@@ -20,7 +20,7 @@ release: build_linux build_osx
 	/bin/bash scripts/release.sh
 
 update_docker:
-	docker build -t phcue-ck:v${VERSION} .
+	docker build --build-arg VERSION=${VERSION} -t phcue-ck:v${VERSION} .
 	docker tag phcue-ck:v${VERSION} lighthousegenomics/phcue-ck:latest
 	docker push lighthousegenomics/phcue-ck:latest
 	docker tag phcue-ck:v${VERSION} lighthousegenomics/phcue-ck:v${VERSION}
