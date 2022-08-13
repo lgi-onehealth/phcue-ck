@@ -28,3 +28,5 @@ update_docker:
 
 update_cargo:
 	CARGO_BUILD_JOBS=${NCPUS} cargo publish
+
+update: update_docker update_cargo
