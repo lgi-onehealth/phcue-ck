@@ -11,19 +11,19 @@ rm -rf ${RELEASE_DIR} && mkdir -p ${RELEASE_DIR}
 
 cp ${LINUX_TARGET_BIN} ${RELEASE_DIR}/phcue-ck && \
     chmod +x ${RELEASE_DIR}/phcue-ck && \
-    sha256sum ${RELEASE_DIR}/phcue-ck > ${RELEASE_DIR}/phcue-ck-v${VERSION}-x86_64-unknown-linux-musl.sha256sum && \
     cd ${RELEASE_DIR} && \
     strip phcue-ck && \
     tar -czvf phcue-ck_v${VERSION}_x86_64-unknown-linux-musl.tar.gz phcue-ck && \
+    sha256sum phcue-ck_v${VERSION}_x86_64-unknown-linux-musl.tar.gz > phcue-ck_v${VERSION}_x86_64-unknown-linux-musl.sha256sum && \
     rm ${RELEASE_DIR}/phcue-ck && \
     cd ${BASE_DIR}
 
 cp ${MAC_TARGET_BIN} ${RELEASE_DIR}/phcue-ck && \
     chmod +x ${RELEASE_DIR}/phcue-ck && \
-    sha256sum ${RELEASE_DIR}/phcue-ck > ${RELEASE_DIR}/phcue-ck_v${VERSION}_x86_64-apple-darwin.sha256sum && \
     cd ${RELEASE_DIR} && \
     strip phcue-ck && \
-    zip phcue-ck-v${VERSION}-x86_64-apple-darwin.zip phcue-ck && \
+    zip phcue-ck_v${VERSION}_x86_64-apple-darwin.zip phcue-ck && \
+    sha256sum phcue-ck_v${VERSION}_x86_64-apple-darwin.zip > phcue-ck_v${VERSION}_x86_64-apple-darwin.sha256sum && \
     rm ${RELEASE_DIR}/phcue-ck && \
     cd ${BASE_DIR}
 
