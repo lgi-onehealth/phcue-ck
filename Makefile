@@ -27,4 +27,4 @@ update_docker:
 	docker push lighthousegenomics/phcue-ck:v${VERSION}
 
 update_cargo:
-	cargo publish
+	CARGO_BUILD_JOBS=${NCPUS} cargo publish
