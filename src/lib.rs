@@ -1,4 +1,4 @@
-use clap::Parser;
+use clap::{Parser, ValueEnum};
 use futures::StreamExt;
 use serde::{Deserialize, Serialize};
 use std::fs::File;
@@ -41,6 +41,7 @@ impl Run {
     }
 }
 
+#[derive(Debug, ValueEnum, Clone)]
 pub enum OutputFormat {
     Json,
     Csv
@@ -172,16 +173,17 @@ pub struct Args {
     pub keep_single_end: bool,
 
     #[clap(
+        value_enum,
         short = 'o',
         long = "output-format",
         value_name = "FORMAT",
-        default_value = "json",
+        default_value_t = OutputFormat::Json,
         help = "Format for output of data."
     )]
     /// The ourput format for the download links
     /// If this is specified, the data will be written to the output format
     /// If this is not specified, the data will be written to stdout
-    pub format: String,
+    pub format: OutputFormat,
 }
 
 pub fn parse_args() -> Args {
@@ -216,26 +218,6 @@ pub fn check_num_requests(num_requests: u8) -> usize {
     }
 }
 
-/// Validate the output format to make sure it is one of 'json' or 'csv'. 
-/// Case is ignored. 
-pub fn check_output_format(format: String) -> OutputFormat {
-    let f = format.to_lowercase();
-    match f.as_ref() {
-       "json" => OutputFormat::Json,
-       "csv" => OutputFormat::Csv,
-       _ => {
-        eprintln!("Option {} unrecognized. Setting output format to JSON.", format);
-        OutputFormat::Json
-       } 
-    }
-    // if f.eq("json") || format.eq("csv") {
-    //     format
-    // } else {
-    //     eprintln!("Option {} unrecognized. Setting output format to JSON.", format);
-    //     "json"
-    // }
-}
-
 /// A function to read accessions from a file and return a vector of validated
 /// accessions. The function skips any empty lines, and will issue a warning
 /// if it encounters an invalid accession. This deals with any potential header
@@ -264,14 +246,11 @@ pub fn read_accessions(file: &PathBuf) -> Vec<String> {
         .collect()
 }
 
-pub fn print_csv(runs: Vec<Run>) -> Result<(), std::io::Error>{
+pub fn print_csv(runs: Vec<Run>) -> Result<(), std::io::Error> {
     let mut wtr = csv::Writer::from_writer(io::stdout());
-    wtr.write_record(&["accession", "url", "md5", "bytes"])?;
+    wtr.write_record(&["accession", "read1_url", "read2_url", "read1_md5", "read2_md5", "read1_bytes", "read2_bytes"])?;
     for run in runs {
-        let accession = &run.accession;
-        for read in run.reads {
-            wtr.write_record(&[accession, &read.url, &read.md5, &read.bytes.to_string()])?;
-        }
+        wtr.write_record(&[&run.accession, &run.reads[0].url, &run.reads[1].url, &run.reads[0].md5, &run.reads[1].md5, &run.reads[0].bytes.to_string(), &run.reads[1].bytes.to_string()])?;
     }
     wtr.flush()?;
     Ok(())
@@ -328,29 +307,6 @@ mod tests {
         let num_requests = 11;
         let result = check_num_requests(num_requests);
         assert_eq!(result, 10);
-    }
-
-    #[test]
-    fn test_check_output_format_valid() {
-        let format = String::from("json");
-        let result = check_output_format(format);
-        assert!(matches!(result, OutputFormat::Json));
-        let format = String::from("JsOn");
-        let result = check_output_format(format);
-        assert!(matches!(result, OutputFormat::Json));
-        let format = String::from("csv");
-        let result = check_output_format(format);
-        assert!(matches!(result, OutputFormat::Csv));
-        let format = String::from("cSv");
-        let result = check_output_format(format);
-        assert!(matches!(result, OutputFormat::Csv));
-    }
-
-    #[test]
-    fn test_check_output_format_default() {
-        let format = String::from("foo");
-        let result = check_output_format(format);
-        assert!(matches!(result, OutputFormat::Json));
     }
 
     #[test]
