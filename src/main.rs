@@ -21,7 +21,6 @@ async fn main() -> Result<(), Error> {
         if !args.keep_single_end {
             runs.iter_mut().for_each(|run| run.clean_single_end());
         }
-        // println!("{:?}", runs)
         match args.format {
             OutputFormat::Json => println!("{}", serde_json::to_string_pretty(&runs).unwrap()),
             OutputFormat::Csv => {

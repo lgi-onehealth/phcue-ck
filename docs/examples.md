@@ -1,4 +1,3 @@
-
 ## Single accession on the command-line
 
 The most simple case is you have an accession, you can run the following:
@@ -26,6 +25,21 @@ Querying ENA for accession: SRR16298173
     ]
   }
 ]
+
+```
+
+## Single accession on the command-line with csv output
+
+The most simple case is you have an accession, you can run the following:
+
+```bash
+phcue-ck --accession SRR16298173 --output-format csv
+```
+
+```
+Querying ENA for accession: SRR16298173
+accession,read1_url,read2_url,read1_md5,read2_md5,read1_bytes,read2_bytes
+SRR16298173,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_1.fastq.gz,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_2.fastq.gz,76c841d58a4949736555f6fe2adcc86a,861e40962c89d62bf298fde8ca1b7415,7332259,7765784
 
 ```
 
@@ -82,6 +96,7 @@ If you have a list of accession in a file, you can run the following:
 ```bash
 cat accessions.txt
 ```
+
 ```bash
 SRR16298173
 SRR16298174
@@ -131,9 +146,9 @@ Querying ENA for accession: SRR16298174
 
 ## Running multiple queries in parallel
 
-When running more than one query, you can set the the number of concurrent queries with the `-n/--num-requests` flag. 
+When running more than one query, you can set the the number of concurrent queries with the `-n/--num-requests` flag.
 
-For example, in the above example, we could've used  `-n 2` to run both queries concurrently.
+For example, in the above example, we could've used `-n 2` to run both queries concurrently.
 
 The `-n` or `--num-requests` option can be used to set the number of concurrent requests to run at once. The default is 1 and the maximum is 10. _We chose 10 as the maximum to be nice to the ENA servers_.
 

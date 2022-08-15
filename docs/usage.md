@@ -1,4 +1,3 @@
-
 `phcue-ck` has a fairly simple interface.
 
 You can get help on the command line by using the `-h/--help` flag.
@@ -23,5 +22,7 @@ OPTIONS:
     -k, --keep-single-end             Keep single end reads if there are paired end reads too
     -n, --num-requests <NUM>          Maximum number of concurrent requests to make to the ENA API
                                       (max of 10 are allowed) [default: 1]
+    -o, --output-format <FORMAT>      Format for output of data. [default: json] [possible values:
+                                      json, csv]
     -V, --version                     Print version information
 ```
