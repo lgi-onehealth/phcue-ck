@@ -16,6 +16,7 @@ exclude = ["/scripts", "Dockerfile", "/.github", "Makefile", "mkdocs.yml", "/doc
 
 [dependencies]
 clap = { version = "3.2.16", features = ["derive"] }
+csv = "1.1.6"
 futures = "0.3.21"
 openssl = { version = "0.10.41", features = ["vendored"] }
 openssl-probe = "0.1.5"
