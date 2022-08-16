@@ -44,7 +44,8 @@ impl Run {
 #[derive(Debug, ValueEnum, Clone)]
 pub enum OutputFormat {
     Json,
-    Csv
+    Csv,
+    CsvLong,
 }
 
 /// Here, we implement the From trait for the Run struct, so that Run instances
@@ -248,9 +249,58 @@ pub fn read_accessions(file: &PathBuf) -> Vec<String> {
 
 pub fn print_csv(runs: Vec<Run>) -> Result<(), std::io::Error> {
     let mut wtr = csv::Writer::from_writer(io::stdout());
-    wtr.write_record(&["accession", "read1_url", "read2_url", "read1_md5", "read2_md5", "read1_bytes", "read2_bytes"])?;
     for run in runs {
-        wtr.write_record(&[&run.accession, &run.reads[0].url, &run.reads[1].url, &run.reads[0].md5, &run.reads[1].md5, &run.reads[0].bytes.to_string(), &run.reads[1].bytes.to_string()])?;
+        wtr.write_record(&["accession", "url", "md5", "bytes"])?;
+        for read in run.reads {
+            wtr.write_record(&[&run.accession, &read.url, &read.md5, &read.bytes.to_string()])?;
+        }
+    }
+    wtr.flush()?;
+    Ok(())
+}
+
+pub fn print_csv_long(runs: Vec<Run>, keep_single_end: bool) -> Result<(), std::io::Error> {
+    let mut wtr = csv::Writer::from_writer(io::stdout());
+    match keep_single_end {
+        true => {
+            wtr.write_record(&["accession", "read1_url", "read2_url", "read3_url", "read1_md5", "read2_md5", "read3_md5", "read1_bytes", "read2_bytes", "read3_bytes"])?;
+            for run in runs {
+                let l = run.reads.len();
+                match l {
+                    1 => {
+                        wtr.write_record(&[&run.accession, &run.reads[0].url, "", "", &run.reads[0].md5, "", "", &run.reads[0].bytes.to_string(), "", ""])?;
+                    },
+                    2 => {
+                        wtr.write_record(&[&run.accession, &run.reads[0].url, &run.reads[1].url, "", &run.reads[0].md5, &run.reads[1].md5, "", &run.reads[0].bytes.to_string(), &run.reads[1].bytes.to_string(), ""])?;
+                    },
+                    3 => {
+                        wtr.write_record(&[&run.accession, &run.reads[0].url, &run.reads[1].url, &run.reads[2].url, &run.reads[0].md5, &run.reads[1].md5, &run.reads[2].md5, &run.reads[0].bytes.to_string(), &run.reads[1].bytes.to_string(), &run.reads[2].bytes.to_string()])?;
+                    },
+                    _ => {
+                        eprintln!("Error in query result for {}", &run.accession);
+                        exit(1);
+                    }
+                };
+            }
+        },
+        false => {
+            wtr.write_record(&["accession", "read1_url", "read2_url", "read1_md5", "read2_md5", "read1_bytes", "read2_bytes"])?;
+            for run in runs {
+                let l = run.reads.len();
+                match l {
+                    1 => {
+                        wtr.write_record(&[&run.accession, &run.reads[0].url, "", &run.reads[0].md5, "", &run.reads[0].bytes.to_string(), ""])?;
+                    },
+                    2 => {
+                        wtr.write_record(&[&run.accession, &run.reads[0].url, &run.reads[1].url, &run.reads[0].md5, &run.reads[1].md5, &run.reads[0].bytes.to_string(), &run.reads[1].bytes.to_string()])?;
+                    },
+                    _ => {
+                        eprintln!("Error in query result for {}", &run.accession);
+                        exit(1);
+                    }
+                }
+            }
+        }
     }
     wtr.flush()?;
     Ok(())
@@ -348,5 +398,49 @@ mod tests {
         assert_eq!(runs[1].reads[1], read_pe_2);
         assert_eq!(runs[2].reads[0], read_pe_1);
         assert_eq!(runs[2].reads[1], read_pe_2);
+    }
+
+    #[test]
+    fn test_print_csv() {
+        let read_1 = Reads {
+            url: "read_1.fastq.gz".to_string(),
+            md5: "md5".to_string(),
+            bytes: 123,
+        };
+        let read_2 = Reads {
+            url: "read_2.fastq.gz".to_string(),
+            md5: "md5".to_string(),
+            bytes: 123,
+        };
+        let read_3 = Reads {
+            url: "read_3.fastq.gz".to_string(),
+            md5: "md5".to_string(),
+            bytes: 123,
+        };
+        let read_4 = Reads {
+            url: "read_4.fastq.gz".to_string(),
+            md5: "md5".to_string(),
+            bytes: 123,
+        };
+        let reads_0 = vec![];
+        let reads_4 = vec![read_1.clone(), read_2.clone(), read_3.clone(), read_4.clone()];
+        let run_0 = Run {
+            accession:  "SRR1234567".to_string(),
+            reads: reads_0,
+        };
+        let run_4 = Run {
+            accession:  "SRR1234567".to_string(),
+            reads: reads_4,
+        };
+        let runs_0 = vec![run_0.clone()];
+        let runs_4 = vec![run_4.clone()];
+        let result_0 = print_csv(runs_0.clone(), true);
+        let result_1 = print_csv(runs_0.clone(), false);
+        let result_2 = print_csv(runs_4.clone(), true);
+        let result_3 = print_csv(runs_4.clone(), false);
+        assert!(result_0.is_err());
+        assert!(result_1.is_err());
+        assert!(result_2.is_err());
+        assert!(result_3.is_err());
     }
 }

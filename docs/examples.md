@@ -40,6 +40,7 @@ phcue-ck --accession SRR16298173 --output-format csv
 Querying ENA for accession: SRR16298173
 accession,read1_url,read2_url,read1_md5,read2_md5,read1_bytes,read2_bytes
 SRR16298173,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_1.fastq.gz,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_2.fastq.gz,76c841d58a4949736555f6fe2adcc86a,861e40962c89d62bf298fde8ca1b7415,7332259,7765784
+CSV output completed successfully!
 
 ```
 

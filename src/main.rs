@@ -1,7 +1,7 @@
 /// Get FTP address for FASTQ files given the accession number
 /// Example output from the API:
 /// {"run_accession":"SRR16298157","fastq_ftp":"ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/057/SRR16298157/SRR16298157_1.fastq.gz;ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/057/SRR16298157/SRR16298157_2.fastq.gz","fastq_bytes":"43409;42752","fastq_md5":"aaf5b365c1b45083c014baa35657b463;e80f09063bf017fa08b0dd881e840ed9","submitted_ftp":"","submitted_bytes":"","submitted_md5":"","sra_ftp":"ftp.sra.ebi.ac.uk/vol1/srr/SRR162/057/SRR16298157","sra_bytes":"157435","sra_md5":"baa98dd72f2a966be8f76569e46c03d9"}
-use phcue_ck::{check_num_requests, concurrent_query_ena, parse_args, read_accessions, print_csv, Run, OutputFormat};
+use phcue_ck::{check_num_requests, concurrent_query_ena, parse_args, read_accessions, print_csv, print_csv_long, Run, OutputFormat};
 use reqwest::Error;
 use std::process::exit;
 
@@ -25,7 +25,22 @@ async fn main() -> Result<(), Error> {
             OutputFormat::Json => println!("{}", serde_json::to_string_pretty(&runs).unwrap()),
             OutputFormat::Csv => {
                 return match print_csv(runs) {
-                    Ok(_) => Ok(()),
+                    Ok(_) => {
+                        eprintln!("CSV output completed successfully!");
+                        Ok(())
+                    },
+                    Err(_) => {
+                        eprintln!("Error writing csv to stdout.");
+                        exit(1);
+                    }
+                };
+            }
+            OutputFormat::CsvLong => {
+                return match print_csv_long(runs, args.keep_single_end) {
+                    Ok(_) => {
+                        eprintln!("CSV output completed successfully!");
+                        Ok(())
+                    },
                     Err(_) => {
                         eprintln!("Error writing csv to stdout.");
                         exit(1);
