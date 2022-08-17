@@ -262,17 +262,12 @@ pub fn print_csv(runs: Vec<Run>) -> Result<(), std::io::Error> {
 
 pub fn print_csv_wide(runs: Vec<Run>, keep_single_end: bool) -> Result<(), std::io::Error> {
     let mut wtr = csv::Writer::from_writer(io::stdout());
-    // Needed to write the different headers
-    match keep_single_end {
-        true => wtr.write_record(&["accession", "read1_url", "read2_url", "read3_url", "read1_md5", "read2_md5", "read3_md5", "read1_bytes", "read2_bytes", "read3_bytes"])?,
-        false => wtr.write_record(&["accession", "read1_url", "read2_url", "read1_md5", "read2_md5", "read1_bytes", "read2_bytes"])?,
-    }
+    wtr.write_record(&["accession", "url_se", "md5_se", "bytes_1", "url_1", "md5_1", "bytes_se", "url_2", "md5_2", "bytes_2"])?;
     for run in runs {
         match run.reads.len() {
-            1 if keep_single_end==true => wtr.write_record(&[&run.accession, &run.reads[0].url, "", "", &run.reads[0].md5, "", "", &run.reads[0].bytes.to_string(), "", ""])?,
-            2 if keep_single_end==true => wtr.write_record(&[&run.accession, &run.reads[0].url, &run.reads[1].url, "", &run.reads[0].md5, &run.reads[1].md5, "", &run.reads[0].bytes.to_string(), &run.reads[1].bytes.to_string(), ""])?,
-            2 if keep_single_end==false => wtr.write_record(&[&run.accession, &run.reads[0].url, &run.reads[1].url, &run.reads[0].md5, &run.reads[1].md5, &run.reads[0].bytes.to_string(), &run.reads[1].bytes.to_string()])?,
-            3 if keep_single_end==true => wtr.write_record(&[&run.accession, &run.reads[0].url, &run.reads[1].url, &run.reads[2].url, &run.reads[0].md5, &run.reads[1].md5, &run.reads[2].md5, &run.reads[0].bytes.to_string(), &run.reads[1].bytes.to_string(), &run.reads[2].bytes.to_string()])?,
+            1 if keep_single_end==true => wtr.write_record(&[&run.accession, &run.reads[0].url,  &run.reads[0].md5, &run.reads[0].bytes.to_string(), "", "", "", "", "", ""])?,
+            2 => wtr.write_record(&[&run.accession, "", "", "", &run.reads[0].url, &run.reads[0].md5, &run.reads[0].bytes.to_string(), &run.reads[1].url, &run.reads[1].md5,  &run.reads[1].bytes.to_string()])?,
+            3 if keep_single_end==true => wtr.write_record(&[&run.accession, &run.reads[0].url, &run.reads[0].md5, &run.reads[0].bytes.to_string(), &run.reads[1].url, &run.reads[1].md5, &run.reads[1].bytes.to_string(), &run.reads[2].url, &run.reads[2].md5, &run.reads[2].bytes.to_string()])?,
             _ => {
                 eprintln!("Found too many or too few reads for {}", &run.accession);
                 exit(1);
@@ -287,10 +282,35 @@ pub fn print_csv_long(runs: Vec<Run>) -> Result<(), std::io::Error> {
     let mut wtr = csv::Writer::from_writer(io::stdout());
     wtr.write_record(&["accession", "variable", "value"])?;
     for run in runs {
-        for read in run.reads {
-            wtr.write_record(&[&run.accession, "url", &read.url])?;
-            wtr.write_record(&[&run.accession, "md5", &read.md5])?;
-            wtr.write_record(&[&run.accession, "bytes", &read.bytes.to_string()])?;
+        match run.reads.len() {
+            1 => {
+                wtr.write_record(&[&run.accession, "url_se", &run.reads[0].url])?;
+                wtr.write_record(&[&run.accession, "md5_se", &run.reads[0].md5])?;
+                wtr.write_record(&[&run.accession, "bytes_se", &run.reads[0].bytes.to_string()])?; 
+            },
+            2 => {
+                wtr.write_record(&[&run.accession, "url_1", &run.reads[0].url])?;
+                wtr.write_record(&[&run.accession, "md5_1", &run.reads[0].md5])?;
+                wtr.write_record(&[&run.accession, "bytes_1", &run.reads[0].bytes.to_string()])?;
+                wtr.write_record(&[&run.accession, "url_2", &run.reads[1].url])?;
+                wtr.write_record(&[&run.accession, "md5_2", &run.reads[1].md5])?;
+                wtr.write_record(&[&run.accession, "bytes_2", &run.reads[1].bytes.to_string()])?;
+            },
+            3 => {
+                wtr.write_record(&[&run.accession, "url_se", &run.reads[0].url])?;
+                wtr.write_record(&[&run.accession, "md5_se", &run.reads[0].md5])?;
+                wtr.write_record(&[&run.accession, "bytes_se", &run.reads[0].bytes.to_string()])?; 
+                wtr.write_record(&[&run.accession, "url_1", &run.reads[1].url])?;
+                wtr.write_record(&[&run.accession, "md5_1", &run.reads[1].md5])?;
+                wtr.write_record(&[&run.accession, "bytes_1", &run.reads[1].bytes.to_string()])?;
+                wtr.write_record(&[&run.accession, "url_2", &run.reads[2].url])?;
+                wtr.write_record(&[&run.accession, "md5_2", &run.reads[2].md5])?;
+                wtr.write_record(&[&run.accession, "bytes_2", &run.reads[2].bytes.to_string()])?;
+            },
+            _ => {
+                eprintln!("Found too many or too few reads for {}", &run.accession);
+                exit(1);
+            }
         }
     }
     wtr.flush()?;
