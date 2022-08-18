@@ -13,6 +13,12 @@ Download the `phcue-ck_v<version>_x86_64-unknown-linux-musl.tar.gz` file and unt
 
 We are currently not providing a binary for Windows. If this is something you need, please [open an issue](https://github.com/lgi-onehealth/phcue-ck/issues/new) and we will get back to you.
 
+## Installation with conda
+
+```bash
+conda install -c conda-forge -c bioconda phcue-ck
+```
+
 ### Installation with cargo
 
 If you have `cargo` installed and want to install `phcue-ck` using `cargo`, you can do so by running:
