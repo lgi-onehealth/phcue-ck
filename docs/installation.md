@@ -11,7 +11,7 @@ Download the `phcue-ck_v<version>_x86_64-unknown-linux-musl.tar.gz` file and unt
 
 ### Windows
 
-Download the `phcue-ck_v<version>_x86_64-pc-windows-gnu.zip` file and unzip it. Move the `phcue-ck.exe` binary to your `PATH` directory.
+We are currently not providing a binary for Windows. If this is something you need, please [open an issue](https://github.com/lgi-onehealth/phcue-ck/issues/new) and we will get back to you.
 
 ### Installation with cargo
 
