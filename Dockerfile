@@ -4,7 +4,7 @@ ARG VERSION="0.1.0"
 
 WORKDIR /app
 
-RUN apt update -y && apt install -y libssl-dev libcurl4-openssl-dev
+RUN apt update -y && apt install -y ca-certificates procps 
 
 ADD https://github.com/lgi-onehealth/phcue-ck/releases/download/v${VERSION}/phcue-ck_v${VERSION}_x86_64-unknown-linux-musl.tar.gz .
 
