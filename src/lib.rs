@@ -256,7 +256,9 @@ pub fn print_csv(runs: Vec<Run>) -> Result<(), std::io::Error> {
             wtr.write_record(&[&run.accession, &read.url, &read.md5, &read.bytes.to_string()])?;
         }
     }
-    wtr.flush()?;
+    // wtr.flush()?;
+    // std::io::stdout().write(&wrt.into_inner().unwrap());
+    println!("{:?}", &wtr.into_inner().unwrap());
     Ok(())
 }
 
@@ -322,93 +324,112 @@ pub fn print_csv_long(runs: Vec<Run>) -> Result<(), std::io::Error> {
 mod tests {
     use super::*;
 
-    #[test]
-    fn test_validate_srr_accession() {
-        let accession = "SRR1234567";
-        let result = validate_accession(accession);
-        assert!(result.is_ok());
-    }
+    // #[test]
+    // fn test_validate_srr_accession() {
+    //     let accession = "SRR1234567";
+    //     let result = validate_accession(accession);
+    //     assert!(result.is_ok());
+    // }
+
+    // #[test]
+    // fn test_validate_err_accession() {
+    //     let accession = "ERR1234567";
+    //     let result = validate_accession(accession);
+    //     assert!(result.is_ok());
+    // }
+
+    // #[test]
+    // fn test_validate_drr_accession() {
+    //     let accession = "DRR1234567";
+    //     let result = validate_accession(accession);
+    //     assert!(result.is_ok());
+    // }
+
+    // #[test]
+    // fn test_validate_invalid_accession() {
+    //     let accession = "1234567";
+    //     let result = validate_accession(accession);
+    //     assert!(result.is_err());
+    // }
+
+    // #[test]
+    // fn test_check_num_requests_valid() {
+    //     let num_requests = 5;
+    //     let result = check_num_requests(num_requests);
+    //     assert_eq!(result, 5);
+    // }
+
+    // #[test]
+    // fn test_check_num_requests_invalid_less_than_1() {
+    //     let num_requests = 0;
+    //     let result = check_num_requests(num_requests);
+    //     assert_eq!(result, 1);
+    // }
+
+    // #[test]
+    // fn test_check_num_requests_invalid_greater_than_10() {
+    //     let num_requests = 11;
+    //     let result = check_num_requests(num_requests);
+    //     assert_eq!(result, 10);
+    // }
+
+    // #[test]
+    // fn test_removal_single_reads() {
+    //     let read_se = Reads {
+    //         url: "read.fastq.gz".to_string(),
+    //         md5: "md5".to_string(),
+    //         bytes: 123,
+    //     };
+    //     let read_pe_1 = Reads {
+    //         url: "read_1.fastq.gz".to_string(),
+    //         md5: "md5".to_string(),
+    //         bytes: 123,
+    //     };
+    //     let read_pe_2 = Reads {
+    //         url: "read_2.fastq.gz".to_string(),
+    //         md5: "md5".to_string(),
+    //         bytes: 123,
+    //     };
+    //     let reads_se = vec![read_se.clone()];
+    //     let reads_pe = vec![read_pe_1.clone(), read_pe_2.clone()];
+    //     let reads_pe_se = vec![read_se.clone(), read_pe_1.clone(), read_pe_2.clone()];
+    //     let run_se = Run {
+    //         accession: "SRR1234567".to_string(),
+    //         reads: reads_se,
+    //     };
+    //     let run_pe = Run {
+    //         accession: "SRR1234567".to_string(),
+    //         reads: reads_pe,
+    //     };
+    //     let run_pe_se = Run {
+    //         accession: "SRR1234567".to_string(),
+    //         reads: reads_pe_se,
+    //     };
+    //     let mut runs = vec![run_se, run_pe, run_pe_se];
+    //     runs.iter_mut().for_each(|run| run.clean_single_end());
+    //     assert_eq!(runs[0].reads[0], read_se);
+    //     assert_eq!(runs[1].reads[0], read_pe_1);
+    //     assert_eq!(runs[1].reads[1], read_pe_2);
+    //     assert_eq!(runs[2].reads[0], read_pe_1);
+    //     assert_eq!(runs[2].reads[1], read_pe_2);
+    // }
 
     #[test]
-    fn test_validate_err_accession() {
-        let accession = "ERR1234567";
-        let result = validate_accession(accession);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_validate_drr_accession() {
-        let accession = "DRR1234567";
-        let result = validate_accession(accession);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_validate_invalid_accession() {
-        let accession = "1234567";
-        let result = validate_accession(accession);
-        assert!(result.is_err());
-    }
-
-    #[test]
-    fn test_check_num_requests_valid() {
-        let num_requests = 5;
-        let result = check_num_requests(num_requests);
-        assert_eq!(result, 5);
-    }
-
-    #[test]
-    fn test_check_num_requests_invalid_less_than_1() {
-        let num_requests = 0;
-        let result = check_num_requests(num_requests);
-        assert_eq!(result, 1);
-    }
-
-    #[test]
-    fn test_check_num_requests_invalid_greater_than_10() {
-        let num_requests = 11;
-        let result = check_num_requests(num_requests);
-        assert_eq!(result, 10);
-    }
-
-    #[test]
-    fn test_removal_single_reads() {
-        let read_se = Reads {
-            url: "read.fastq.gz".to_string(),
+    fn test_write_csv() {
+        // let mut wtr = csv::Writer::from_writer(io::stdout());
+        let read = Reads {
+            url: "url".to_string(),
             md5: "md5".to_string(),
             bytes: 123,
         };
-        let read_pe_1 = Reads {
-            url: "read_1.fastq.gz".to_string(),
-            md5: "md5".to_string(),
-            bytes: 123,
+        let reads = vec![read.clone()];
+        let run = Run {
+            accession: "accession".to_string(),
+            reads: reads,
         };
-        let read_pe_2 = Reads {
-            url: "read_2.fastq.gz".to_string(),
-            md5: "md5".to_string(),
-            bytes: 123,
-        };
-        let reads_se = vec![read_se.clone()];
-        let reads_pe = vec![read_pe_1.clone(), read_pe_2.clone()];
-        let reads_pe_se = vec![read_se.clone(), read_pe_1.clone(), read_pe_2.clone()];
-        let run_se = Run {
-            accession: "SRR1234567".to_string(),
-            reads: reads_se,
-        };
-        let run_pe = Run {
-            accession: "SRR1234567".to_string(),
-            reads: reads_pe,
-        };
-        let run_pe_se = Run {
-            accession: "SRR1234567".to_string(),
-            reads: reads_pe_se,
-        };
-        let mut runs = vec![run_se, run_pe, run_pe_se];
-        runs.iter_mut().for_each(|run| run.clean_single_end());
-        assert_eq!(runs[0].reads[0], read_se);
-        assert_eq!(runs[1].reads[0], read_pe_1);
-        assert_eq!(runs[1].reads[1], read_pe_2);
-        assert_eq!(runs[2].reads[0], read_pe_1);
-        assert_eq!(runs[2].reads[1], read_pe_2);
+        let mut runs = vec![run];
+        let res = print_csv(runs).unwrap();
+        // let data = String::from_utf8(wtr.into_inner());
+        println!("{:?}", res);
     }
 }

@@ -38,8 +38,46 @@ phcue-ck --accession SRR16298173 --output-format csv
 
 ```
 Querying ENA for accession: SRR16298173
-accession,read1_url,read2_url,read1_md5,read2_md5,read1_bytes,read2_bytes
-SRR16298173,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_1.fastq.gz,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_2.fastq.gz,76c841d58a4949736555f6fe2adcc86a,861e40962c89d62bf298fde8ca1b7415,7332259,7765784
+accession,url,md5,bytes
+SRR16298173,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_1.fastq.gz,76c841d58a4949736555f6fe2adcc86a,7332259
+SRR16298173,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_2.fastq.gz,861e40962c89d62bf298fde8ca1b7415,7765784
+CSV output completed successfully!
+
+```
+
+## Single accession on the command-line with wide csv output
+
+The most simple case is you have an accession, you can run the following:
+
+```bash
+phcue-ck --accession SRR16298173 --output-format csv-wide
+```
+
+```
+Querying ENA for accession: SRR16298173
+accession,url_se,md5_se,bytes_1,url_1,md5_1,bytes_se,url_2,md5_2,bytes_2
+SRR16298173,,,,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_1.fastq.gz,76c841d58a4949736555f6fe2adcc86a,7332259,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_2.fastq.gz,861e40962c89d62bf298fde8ca1b7415,7765784
+CSV output completed successfully!
+
+```
+
+## Single accession on the command-line with long csv output
+
+The most simple case is you have an accession, you can run the following:
+
+```bash
+phcue-ck --accession SRR16298173 --output-format csv-long
+```
+
+```
+Querying ENA for accession: SRR16298173
+accession,variable,value
+SRR16298173,url_1,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_1.fastq.gz
+SRR16298173,md5_1,76c841d58a4949736555f6fe2adcc86a
+SRR16298173,bytes_1,7332259
+SRR16298173,url_2,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_2.fastq.gz
+SRR16298173,md5_2,861e40962c89d62bf298fde8ca1b7415
+SRR16298173,bytes_2,7765784
 CSV output completed successfully!
 
 ```

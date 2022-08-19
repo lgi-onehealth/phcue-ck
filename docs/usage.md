@@ -23,6 +23,6 @@ OPTIONS:
     -n, --num-requests <NUM>          Maximum number of concurrent requests to make to the ENA API
                                       (max of 10 are allowed) [default: 1]
     -o, --output-format <FORMAT>      Format for output of data. [default: json] [possible values:
-                                      json, csv, csv-long]
+                                      json, csv, csv-wide, csv-long]
     -V, --version                     Print version information
 ```
