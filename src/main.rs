@@ -9,7 +9,6 @@ use std::process::exit;
 async fn main() -> Result<(), Error> {
     openssl_probe::init_ssl_cert_env_vars();
     let args = parse_args();
-    // let output_fmt = check_output_format(args.format);
     let accessions = match args.file {
         Some(file) => read_accessions(&file),
         None => args.accession,
@@ -24,7 +23,8 @@ async fn main() -> Result<(), Error> {
         match args.format {
             OutputFormat::Json => println!("{}", serde_json::to_string_pretty(&runs).unwrap()),
             OutputFormat::Csv => {
-                return match print_csv(runs) {
+                let mut wtr = csv::Writer::from_writer(std::io::stdout());
+                return match print_csv(&mut wtr, runs) {
                     Ok(_) => {
                         eprintln!("CSV output completed successfully!");
                         Ok(())
@@ -36,7 +36,8 @@ async fn main() -> Result<(), Error> {
                 };
             }
             OutputFormat::CsvWide => {
-                return match print_csv_wide(runs, args.keep_single_end) {
+                let mut wtr = csv::Writer::from_writer(std::io::stdout());
+                return match print_csv_wide(&mut wtr, runs, args.keep_single_end) {
                     Ok(_) => {
                         eprintln!("CSV output completed successfully!");
                         Ok(())
@@ -48,7 +49,8 @@ async fn main() -> Result<(), Error> {
                 };
             }
             OutputFormat::CsvLong => {
-                return match print_csv_long(runs) {
+                let mut wtr = csv::Writer::from_writer(std::io::stdout());
+                return match print_csv_long(&mut wtr, runs) {
                     Ok(_) => {
                         eprintln!("CSV output completed successfully!");
                         Ok(())
