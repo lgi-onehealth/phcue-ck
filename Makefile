@@ -5,10 +5,10 @@ NCPUS := $(shell if [ $(shell nproc) -gt 1 ]; then expr $(shell nproc) - 1; else
 VERSION := $(shell grep '^version' Cargo.toml | sed -e 's/version = \"//g' -e 's/\"//g')
 
 test_linux:
-	CARGO_BUILD_JOBS=${NCPUS} cross test --target x86_64-unknown-linux-musl
+	cross test -j ${NCPUS} --target x86_64-unknown-linux-musl
 
 build_linux:
-	CARGO_BUILD_JOBS=${NCPUS} cross build --release --target x86_64-unknown-linux-musl
+	cross build -j ${NCPUS} --release --target x86_64-unknown-linux-musl
 
 test_osx:
 	CARGO_BUILD_JOBS=${NCPUS} cargo test
