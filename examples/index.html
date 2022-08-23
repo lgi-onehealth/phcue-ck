@@ -1,0 +1,715 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.3.1, mkdocs-material-8.4.1">
+    
+    
+      
+        <title>Examples - phcue-ck</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.69437709.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.cbb835fc.min.css">
+        
+      
+      
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#single-accession-on-the-command-line" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="phcue-ck" class="md-header__button md-logo" aria-label="phcue-ck" data-md-component="logo">
+      
+  <img src="../assets/phcue-ck-fav.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            phcue-ck
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Examples
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/lgi-onehealth/phcue-ck" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="phcue-ck" class="md-nav__button md-logo" aria-label="phcue-ck" data-md-component="logo">
+      
+  <img src="../assets/phcue-ck-fav.svg" alt="logo">
+
+    </a>
+    phcue-ck
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/lgi-onehealth/phcue-ck" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/" class="md-nav__link">
+        Usage
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Examples
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Examples
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#single-accession-on-the-command-line" class="md-nav__link">
+    Single accession on the command-line
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#single-accession-on-the-command-line-with-csv-output" class="md-nav__link">
+    Single accession on the command-line with csv output
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#single-accession-on-the-command-line-with-wide-csv-output" class="md-nav__link">
+    Single accession on the command-line with wide csv output
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#single-accession-on-the-command-line-with-long-csv-output" class="md-nav__link">
+    Single accession on the command-line with long csv output
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multiple-accessions-on-the-command-line" class="md-nav__link">
+    Multiple accessions on the command-line
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multiple-accessions-from-a-file" class="md-nav__link">
+    Multiple accessions from a file
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-multiple-queries-in-parallel" class="md-nav__link">
+    Running multiple queries in parallel
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keeping-single-end-fastq-when-paired-end-fastq-is-available" class="md-nav__link">
+    Keeping single-end FASTQ when paired-end FASTQ is available
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#single-accession-on-the-command-line" class="md-nav__link">
+    Single accession on the command-line
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#single-accession-on-the-command-line-with-csv-output" class="md-nav__link">
+    Single accession on the command-line with csv output
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#single-accession-on-the-command-line-with-wide-csv-output" class="md-nav__link">
+    Single accession on the command-line with wide csv output
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#single-accession-on-the-command-line-with-long-csv-output" class="md-nav__link">
+    Single accession on the command-line with long csv output
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multiple-accessions-on-the-command-line" class="md-nav__link">
+    Multiple accessions on the command-line
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multiple-accessions-from-a-file" class="md-nav__link">
+    Multiple accessions from a file
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#running-multiple-queries-in-parallel" class="md-nav__link">
+    Running multiple queries in parallel
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keeping-single-end-fastq-when-paired-end-fastq-is-available" class="md-nav__link">
+    Keeping single-end FASTQ when paired-end FASTQ is available
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+  <a href="https://github.com/lgi-onehealth/phcue-ck/edit/master/docs/examples.md" title="Edit this page" class="md-content__button md-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+
+  <h1>Examples</h1>
+
+<h2 id="single-accession-on-the-command-line">Single accession on the command-line</h2>
+<p>The most simple case is you have an accession, you can run the following:</p>
+<pre><code class="language-bash">phcue-ck --accession SRR16298173
+</code></pre>
+<pre><code>Querying ENA for accession: SRR16298173
+[
+  {
+    &quot;accession&quot;: &quot;SRR16298173&quot;,
+    &quot;reads&quot;: [
+      {
+        &quot;url&quot;: &quot;ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_1.fastq.gz&quot;,
+        &quot;md5&quot;: &quot;76c841d58a4949736555f6fe2adcc86a&quot;,
+        &quot;bytes&quot;: 7332259
+      },
+      {
+        &quot;url&quot;: &quot;ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_2.fastq.gz&quot;,
+        &quot;md5&quot;: &quot;861e40962c89d62bf298fde8ca1b7415&quot;,
+        &quot;bytes&quot;: 7765784
+      }
+    ]
+  }
+]
+
+</code></pre>
+<h2 id="single-accession-on-the-command-line-with-csv-output">Single accession on the command-line with csv output</h2>
+<p>The most simple case is you have an accession, you can run the following:</p>
+<pre><code class="language-bash">phcue-ck --accession SRR16298173 --output-format csv
+</code></pre>
+<pre><code>Querying ENA for accession: SRR16298173
+accession,url,md5,bytes
+SRR16298173,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_1.fastq.gz,76c841d58a4949736555f6fe2adcc86a,7332259
+SRR16298173,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_2.fastq.gz,861e40962c89d62bf298fde8ca1b7415,7765784
+CSV output completed successfully!
+
+</code></pre>
+<h2 id="single-accession-on-the-command-line-with-wide-csv-output">Single accession on the command-line with wide csv output</h2>
+<p>The most simple case is you have an accession, you can run the following:</p>
+<pre><code class="language-bash">phcue-ck --accession SRR16298173 --output-format csv-wide
+</code></pre>
+<pre><code>Querying ENA for accession: SRR16298173
+accession,url_se,md5_se,bytes_1,url_1,md5_1,bytes_se,url_2,md5_2,bytes_2
+SRR16298173,,,,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_1.fastq.gz,76c841d58a4949736555f6fe2adcc86a,7332259,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_2.fastq.gz,861e40962c89d62bf298fde8ca1b7415,7765784
+CSV output completed successfully!
+
+</code></pre>
+<h2 id="single-accession-on-the-command-line-with-long-csv-output">Single accession on the command-line with long csv output</h2>
+<p>The most simple case is you have an accession, you can run the following:</p>
+<pre><code class="language-bash">phcue-ck --accession SRR16298173 --output-format csv-long
+</code></pre>
+<pre><code>Querying ENA for accession: SRR16298173
+accession,variable,value
+SRR16298173,url_1,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_1.fastq.gz
+SRR16298173,md5_1,76c841d58a4949736555f6fe2adcc86a
+SRR16298173,bytes_1,7332259
+SRR16298173,url_2,ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_2.fastq.gz
+SRR16298173,md5_2,861e40962c89d62bf298fde8ca1b7415
+SRR16298173,bytes_2,7765784
+CSV output completed successfully!
+
+</code></pre>
+<h2 id="multiple-accessions-on-the-command-line">Multiple accessions on the command-line</h2>
+<p>You can specify multiple accessions at once, and the output will be a list of results for each accession.</p>
+<pre><code class="language-bash">phcue-ck --accession SRR16298173 SRR16298174
+</code></pre>
+<pre><code>Querying ENA for accession: SRR16298173
+Querying ENA for accession: SRR16298174
+[
+  {
+    &quot;accession&quot;: &quot;SRR16298173&quot;,
+    &quot;reads&quot;: [
+      {
+        &quot;url&quot;: &quot;ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_1.fastq.gz&quot;,
+        &quot;md5&quot;: &quot;76c841d58a4949736555f6fe2adcc86a&quot;,
+        &quot;bytes&quot;: 7332259
+      },
+      {
+        &quot;url&quot;: &quot;ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_2.fastq.gz&quot;,
+        &quot;md5&quot;: &quot;861e40962c89d62bf298fde8ca1b7415&quot;,
+        &quot;bytes&quot;: 7765784
+      }
+    ]
+  },
+  {
+    &quot;accession&quot;: &quot;SRR16298174&quot;,
+    &quot;reads&quot;: [
+      {
+        &quot;url&quot;: &quot;ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/074/SRR16298174/SRR16298174_1.fastq.gz&quot;,
+        &quot;md5&quot;: &quot;ca4365343d144947b5acf6e8ee124e49&quot;,
+        &quot;bytes&quot;: 7444532
+      },
+      {
+        &quot;url&quot;: &quot;ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/074/SRR16298174/SRR16298174_2.fastq.gz&quot;,
+        &quot;md5&quot;: &quot;39523f0e9757e953cb0a5d707b9e2b58&quot;,
+        &quot;bytes&quot;: 10960575
+      }
+    ]
+  }
+]
+
+</code></pre>
+<h2 id="multiple-accessions-from-a-file">Multiple accessions from a file</h2>
+<p>If you have a list of accession in a file, you can run the following:</p>
+<pre><code class="language-bash">cat accessions.txt
+</code></pre>
+<pre><code class="language-bash">SRR16298173
+SRR16298174
+</code></pre>
+<pre><code class="language-bash">phcue-ck --file accessions.txt
+</code></pre>
+<pre><code>Querying ENA for accession: SRR16298173
+Querying ENA for accession: SRR16298174
+[
+  {
+    &quot;accession&quot;: &quot;SRR16298173&quot;,
+    &quot;reads&quot;: [
+      {
+        &quot;url&quot;: &quot;ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_1.fastq.gz&quot;,
+        &quot;md5&quot;: &quot;76c841d58a4949736555f6fe2adcc86a&quot;,
+        &quot;bytes&quot;: 7332259
+      },
+      {
+        &quot;url&quot;: &quot;ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/073/SRR16298173/SRR16298173_2.fastq.gz&quot;,
+        &quot;md5&quot;: &quot;861e40962c89d62bf298fde8ca1b7415&quot;,
+        &quot;bytes&quot;: 7765784
+      }
+    ]
+  },
+  {
+    &quot;accession&quot;: &quot;SRR16298174&quot;,
+    &quot;reads&quot;: [
+      {
+        &quot;url&quot;: &quot;ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/074/SRR16298174/SRR16298174_1.fastq.gz&quot;,
+        &quot;md5&quot;: &quot;ca4365343d144947b5acf6e8ee124e49&quot;,
+        &quot;bytes&quot;: 7444532
+      },
+      {
+        &quot;url&quot;: &quot;ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR162/074/SRR16298174/SRR16298174_2.fastq.gz&quot;,
+        &quot;md5&quot;: &quot;39523f0e9757e953cb0a5d707b9e2b58&quot;,
+        &quot;bytes&quot;: 10960575
+      }
+    ]
+  }
+]
+
+</code></pre>
+<h2 id="running-multiple-queries-in-parallel">Running multiple queries in parallel</h2>
+<p>When running more than one query, you can set the the number of concurrent queries with the <code>-n/--num-requests</code> flag.</p>
+<p>For example, in the above example, we could've used <code>-n 2</code> to run both queries concurrently.</p>
+<p>The <code>-n</code> or <code>--num-requests</code> option can be used to set the number of concurrent requests to run at once. The default is 1 and the maximum is 10. <em>We chose 10 as the maximum to be nice to the ENA servers</em>.</p>
+<pre><code>phcue-ck -n2 --file accessions.txt
+</code></pre>
+<h2 id="keeping-single-end-fastq-when-paired-end-fastq-is-available">Keeping single-end FASTQ when paired-end FASTQ is available</h2>
+<p>Sometimes, an accession can have up to three files associated with it, the paired-end reads and, typically, a much smaller, single-end reads file.</p>
+<p>By default, this single-end file is ignored. You can keep it in the output by using the <code>-k</code> or <code>--keep-single-end</code> option.</p>
+<pre><code class="language-bash">$ phcue-ck -k --accession ERR5556343
+Querying ENA for accession: ERR5556343
+[
+  {
+    &quot;accession&quot;: &quot;ERR5556343&quot;,
+    &quot;reads&quot;: [
+      {
+        &quot;url&quot;: &quot;ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR555/003/ERR5556343/ERR5556343.fastq.gz&quot;,
+        &quot;md5&quot;: &quot;2b1b1d16d7b5a3d9c27f057c5064dd04&quot;,
+        &quot;bytes&quot;: 41148
+      },
+      {
+        &quot;url&quot;: &quot;ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR555/003/ERR5556343/ERR5556343_1.fastq.gz&quot;,
+        &quot;md5&quot;: &quot;2dd162ca91d340667b611d7f014eaaa5&quot;,
+        &quot;bytes&quot;: 7479353
+      },
+      {
+        &quot;url&quot;: &quot;ftp://ftp.sra.ebi.ac.uk/vol1/fastq/ERR555/003/ERR5556343/ERR5556343_2.fastq.gz&quot;,
+        &quot;md5&quot;: &quot;8041deb0614dc669a3f28c20b330a599&quot;,
+        &quot;bytes&quot;: 8349710
+      }
+    ]
+  }
+]
+
+</code></pre>
+
+
+
+
+              
+            </article>
+            
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../usage/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Usage" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Usage
+            </div>
+          </div>
+        </a>
+      
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Lighthouse Genomics, Inc. 2022
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.ecf98df9.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.9c69f0bc.min.js"></script>
+      
+    
+  </body>
+</html>
