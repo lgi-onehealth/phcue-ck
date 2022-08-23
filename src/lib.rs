@@ -1,4 +1,4 @@
-use clap::Parser;
+use clap::{Parser, ValueEnum};
 use futures::StreamExt;
 use serde::{Deserialize, Serialize};
 use std::fs::File;
@@ -38,6 +38,14 @@ impl Run {
             self.reads.remove(0);
         }
     }
+}
+
+#[derive(Debug, ValueEnum, Clone)]
+pub enum OutputFormat {
+    Json,
+    Csv,
+    CsvWide,
+    CsvLong,
 }
 
 /// Here, we implement the From trait for the Run struct, so that Run instances
@@ -164,6 +172,19 @@ pub struct Args {
     /// By default, we discard single end reads if there are paired end reads too.
     /// This is if the user does wish to have the single end reads
     pub keep_single_end: bool,
+
+    #[clap(
+        value_enum,
+        short = 'o',
+        long = "output-format",
+        value_name = "FORMAT",
+        default_value_t = OutputFormat::Json,
+        help = "Format for output of data."
+    )]
+    /// The ourput format for the download links
+    /// If this is specified, the data will be written to the output format
+    /// If this is not specified, the data will be written to stdout
+    pub format: OutputFormat,
 }
 
 pub fn parse_args() -> Args {
@@ -225,6 +246,76 @@ pub fn read_accessions(file: &PathBuf) -> Vec<String> {
         })
         .collect()
 }
+
+/// A function to handle output in the csv format. This function outputs one read per line.
+pub fn print_csv<W: std::io::Write>(wtr: &mut csv::Writer<W>, runs: Vec<Run>) -> Result<(), std::io::Error> {
+    for run in runs {
+        wtr.write_record(&["accession", "url", "md5", "bytes"])?;
+        for read in run.reads {
+            wtr.write_record(&[&run.accession, &read.url, &read.md5, &read.bytes.to_string()])?;
+        }
+    }
+    wtr.flush()?;
+    Ok(())
+}
+
+/// A function to handle output in the wide csv format. This function outputs one run per line.
+pub fn print_csv_wide<W: std::io::Write>(wtr: &mut csv::Writer<W>, runs: Vec<Run>, keep_single_end: bool) -> Result<(), std::io::Error> {
+    wtr.write_record(&["accession", "url_se", "md5_se", "bytes_1", "url_1", "md5_1", "bytes_se", "url_2", "md5_2", "bytes_2"])?;
+    for run in runs {
+        match run.reads.len() {
+            1 if keep_single_end==true => wtr.write_record(&[&run.accession, &run.reads[0].url,  &run.reads[0].md5, &run.reads[0].bytes.to_string(), "", "", "", "", "", ""])?,
+            2 => wtr.write_record(&[&run.accession, "", "", "", &run.reads[0].url, &run.reads[0].md5, &run.reads[0].bytes.to_string(), &run.reads[1].url, &run.reads[1].md5,  &run.reads[1].bytes.to_string()])?,
+            3 if keep_single_end==true => wtr.write_record(&[&run.accession, &run.reads[0].url, &run.reads[0].md5, &run.reads[0].bytes.to_string(), &run.reads[1].url, &run.reads[1].md5, &run.reads[1].bytes.to_string(), &run.reads[2].url, &run.reads[2].md5, &run.reads[2].bytes.to_string()])?,
+            _ => {
+                eprintln!("Found too many or too few reads for {}", &run.accession);
+                exit(1);
+            }
+        }
+    }
+    wtr.flush()?;
+    Ok(())
+}
+
+///A function to handle output in the long csv format. This function prints one variable per line.
+pub fn print_csv_long<W: std::io::Write>(wtr: &mut csv::Writer<W>, runs: Vec<Run>) -> Result<(), std::io::Error> {
+    wtr.write_record(&["accession", "variable", "value"])?;
+    for run in runs {
+        match run.reads.len() {
+            1 => {
+                wtr.write_record(&[&run.accession, "url_se", &run.reads[0].url])?;
+                wtr.write_record(&[&run.accession, "md5_se", &run.reads[0].md5])?;
+                wtr.write_record(&[&run.accession, "bytes_se", &run.reads[0].bytes.to_string()])?; 
+            },
+            2 => {
+                wtr.write_record(&[&run.accession, "url_1", &run.reads[0].url])?;
+                wtr.write_record(&[&run.accession, "md5_1", &run.reads[0].md5])?;
+                wtr.write_record(&[&run.accession, "bytes_1", &run.reads[0].bytes.to_string()])?;
+                wtr.write_record(&[&run.accession, "url_2", &run.reads[1].url])?;
+                wtr.write_record(&[&run.accession, "md5_2", &run.reads[1].md5])?;
+                wtr.write_record(&[&run.accession, "bytes_2", &run.reads[1].bytes.to_string()])?;
+            },
+            3 => {
+                wtr.write_record(&[&run.accession, "url_se", &run.reads[0].url])?;
+                wtr.write_record(&[&run.accession, "md5_se", &run.reads[0].md5])?;
+                wtr.write_record(&[&run.accession, "bytes_se", &run.reads[0].bytes.to_string()])?; 
+                wtr.write_record(&[&run.accession, "url_1", &run.reads[1].url])?;
+                wtr.write_record(&[&run.accession, "md5_1", &run.reads[1].md5])?;
+                wtr.write_record(&[&run.accession, "bytes_1", &run.reads[1].bytes.to_string()])?;
+                wtr.write_record(&[&run.accession, "url_2", &run.reads[2].url])?;
+                wtr.write_record(&[&run.accession, "md5_2", &run.reads[2].md5])?;
+                wtr.write_record(&[&run.accession, "bytes_2", &run.reads[2].bytes.to_string()])?;
+            },
+            _ => {
+                eprintln!("Found too many or too few reads for {}", &run.accession);
+                exit(1);
+            }
+        }
+    }
+    wtr.flush()?;
+    Ok(())
+}
+
 
 #[cfg(test)]
 mod tests {
@@ -318,5 +409,128 @@ mod tests {
         assert_eq!(runs[1].reads[1], read_pe_2);
         assert_eq!(runs[2].reads[0], read_pe_1);
         assert_eq!(runs[2].reads[1], read_pe_2);
+    }
+
+    #[test]
+    fn test_print_csv() {
+        let read = Reads {
+            url: "url".to_string(),
+            md5: "md5".to_string(),
+            bytes: 123,
+        };
+        let reads = vec![read.clone()];
+        let run = Run {
+            accession: "accession".to_string(),
+            reads: reads,
+        };
+        let runs = vec![run];
+        let mut wtr = csv::Writer::from_writer(Vec::new());
+        print_csv(&mut wtr, runs).unwrap();
+        let data = String::from_utf8(wtr.into_inner().unwrap()).unwrap();
+        assert_eq!(data, "accession,url,md5,bytes\naccession,url,md5,123\n");
+    }
+
+    #[test]
+    fn test_print_csv_wide() {
+        let read_se = Reads {
+            url: "url_se".to_string(),
+            md5: "md5_se".to_string(),
+            bytes: 123,
+        };
+        let read_pe_1 = Reads {
+            url: "url_pe_1".to_string(),
+            md5: "md5_pe_1".to_string(),
+            bytes: 123,
+        };
+        let read_pe_2 = Reads {
+            url: "url_pe_2".to_string(),
+            md5: "md5_pe_2".to_string(),
+            bytes: 123,
+        };
+        let reads_se = vec![read_se.clone()];
+        let reads_pe = vec![read_pe_1.clone(), read_pe_2.clone()];
+        let reads_pe_se = vec![read_se.clone(), read_pe_1.clone(), read_pe_2.clone()];
+        let run_se = Run {
+            accession: "SRR1234567".to_string(),
+            reads: reads_se,
+        };
+        let run_pe = Run {
+            accession: "SRR1234567".to_string(),
+            reads: reads_pe,
+        };
+        let run_pe_se = Run {
+            accession: "SRR1234567".to_string(),
+            reads: reads_pe_se,
+        };
+ 
+        let runs = vec![run_se];
+        let mut wtr = csv::Writer::from_writer(Vec::new());
+        print_csv_wide(&mut wtr, runs, true).unwrap();
+        let data = String::from_utf8(wtr.into_inner().unwrap()).unwrap();
+        assert_eq!(data, "accession,url_se,md5_se,bytes_1,url_1,md5_1,bytes_se,url_2,md5_2,bytes_2\nSRR1234567,url_se,md5_se,123,,,,,,\n");
+
+        let runs_pe = vec![run_pe];
+        let mut wtr = csv::Writer::from_writer(Vec::new());
+        print_csv_wide(&mut wtr, runs_pe, false).unwrap();
+        let data = String::from_utf8(wtr.into_inner().unwrap()).unwrap();
+        assert_eq!(data, "accession,url_se,md5_se,bytes_1,url_1,md5_1,bytes_se,url_2,md5_2,bytes_2\nSRR1234567,,,,url_pe_1,md5_pe_1,123,url_pe_2,md5_pe_2,123\n");
+
+        let runs_pe_se = vec![run_pe_se];
+        let mut wtr = csv::Writer::from_writer(Vec::new());
+        print_csv_wide(&mut wtr, runs_pe_se, true).unwrap();
+        let data = String::from_utf8(wtr.into_inner().unwrap()).unwrap();
+        assert_eq!(data, "accession,url_se,md5_se,bytes_1,url_1,md5_1,bytes_se,url_2,md5_2,bytes_2\nSRR1234567,url_se,md5_se,123,url_pe_1,md5_pe_1,123,url_pe_2,md5_pe_2,123\n");
+    }
+
+    #[test]
+    fn test_print_csv_long() {
+        let read_se = Reads {
+            url: "url_se".to_string(),
+            md5: "md5_se".to_string(),
+            bytes: 123,
+        };
+        let read_pe_1 = Reads {
+            url: "url_pe_1".to_string(),
+            md5: "md5_pe_1".to_string(),
+            bytes: 123,
+        };
+        let read_pe_2 = Reads {
+            url: "url_pe_2".to_string(),
+            md5: "md5_pe_2".to_string(),
+            bytes: 123,
+        };
+        let reads_se = vec![read_se.clone()];
+        let reads_pe = vec![read_pe_1.clone(), read_pe_2.clone()];
+        let reads_pe_se = vec![read_se.clone(), read_pe_1.clone(), read_pe_2.clone()];
+        let run_se = Run {
+            accession: "SRR1234567".to_string(),
+            reads: reads_se,
+        };
+        let run_pe = Run {
+            accession: "SRR1234567".to_string(),
+            reads: reads_pe,
+        };
+        let run_pe_se = Run {
+            accession: "SRR1234567".to_string(),
+            reads: reads_pe_se,
+        };
+ 
+        let runs = vec![run_se];
+        let mut wtr = csv::Writer::from_writer(Vec::new());
+        print_csv_long(&mut wtr, runs).unwrap();
+        let data = String::from_utf8(wtr.into_inner().unwrap()).unwrap();
+        assert_eq!(data, "accession,variable,value\nSRR1234567,url_se,url_se\nSRR1234567,md5_se,md5_se\nSRR1234567,bytes_se,123\n");
+
+        let runs_pe = vec![run_pe];
+        let mut wtr = csv::Writer::from_writer(Vec::new());
+        print_csv_long(&mut wtr, runs_pe).unwrap();
+        let data = String::from_utf8(wtr.into_inner().unwrap()).unwrap();
+        assert_eq!(data, "accession,variable,value\nSRR1234567,url_1,url_pe_1\nSRR1234567,md5_1,md5_pe_1\nSRR1234567,bytes_1,123\nSRR1234567,url_2,url_pe_2\nSRR1234567,md5_2,md5_pe_2\nSRR1234567,bytes_2,123\n");
+
+        let runs_pe_se = vec![run_pe_se];
+        let mut wtr = csv::Writer::from_writer(Vec::new());
+        print_csv_long(&mut wtr, runs_pe_se).unwrap();
+        let data = String::from_utf8(wtr.into_inner().unwrap()).unwrap();
+        assert_eq!(data, "accession,variable,value\nSRR1234567,url_se,url_se\nSRR1234567,md5_se,md5_se\nSRR1234567,bytes_se,123\nSRR1234567,url_1,url_pe_1\nSRR1234567,md5_1,md5_pe_1\nSRR1234567,bytes_1,123\nSRR1234567,url_2,url_pe_2\nSRR1234567,md5_2,md5_pe_2\nSRR1234567,bytes_2,123\n");
     }
 }
